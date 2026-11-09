@@ -12,10 +12,7 @@ pool.connect()
     client.release();
   })
   .catch((error) => {
-    console.error("Database connection failed:", error.message);
+    console.error("Database connection failed:", error);
+    console.error("Error code:", error.code);
+    console.error("Error detail:", error.detail);
   });
-
-// start the server 
-app.listen(PORT, () => {
-  console.log(`the martha journal is running on port ${PORT}`);
-});
