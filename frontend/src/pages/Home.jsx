@@ -1,31 +1,38 @@
 
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import ArticleCard from "../components/ArticleCard.jsx";
 
 function Home() {
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const articles = [
-    {
-      id: 1,
-      title: "The Beauty of Starting Again",
-      category: "Personal Reflections",
-      excerpt: "Sometimes, beginning again is not a sign of failure. It is an opportunity to discover a new version of yourself.",
-      image: "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8"
-    },
-    {
-      id: 2,
-      title: "Lessons I'm Learning Along the Way",
-      category: "Life & Growth",
-      excerpt: "Life has a way of teaching us through experiences, unexpected moments and the people we meet.",
-      image: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e"
-    },
-    {
-      id: 3,
-      title: "Finding Joy in the Little Things",
-      category: "Lifestyle",
-      excerpt: "A reminder that happiness can sometimes be found in the simplest and most ordinary moments.",
-      image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e"
-    }
-  ];
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const response = await fetch(
+          "https://the-martha-journal.onrender.com/api/articles"
+        );
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.message || "Failed to retrieve articles");
+        }
+
+        // Get only the three latest published articles
+        setArticles(result.data.slice(0, 3));
+      } catch (error) {
+        console.error("Error fetching latest stories:", error);
+        setError("Unable to load the latest stories.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArticles();
+  }, []);
 
   return (
     <div className="bg-journal">
@@ -48,12 +55,12 @@ function Home() {
           </p>
 
           <div className="mt-10">
-            <a
-              href="/journal"
+            <Link
+              to="/journal"
               className="inline-block bg-charcoal text-journal px-8 py-4 rounded-full hover:bg-brown transition"
             >
               Explore the Journal
-            </a>
+            </Link>
           </div>
 
         </div>
@@ -74,106 +81,110 @@ function Home() {
             </h2>
           </div>
 
-          <a
-            href="/journal"
+          <Link
+            to="/journal"
             className="text-sm text-charcoal underline underline-offset-4"
           >
             View all stories
-          </a>
+          </Link>
 
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        {loading && (
+          <p className="text-taupe">Loading latest stories...</p>
+        )}
 
-          {articles.map((article) => (
-            <ArticleCard key={article.id} article={article} />
-          ))}
+        {error && (
+          <p className="text-red-600">{error}</p>
+        )}
+
+        {!loading && !error && articles.length === 0 && (
+          <p className="text-taupe">No published stories yet.</p>
+        )}
+
+        {!loading && !error && articles.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {articles.map((article) => (
+              <ArticleCard key={article.id} article={article} />
+            ))}
+          </div>
+        )}
+
+      </section>
+
+      {/* ABOUT MARTHA SECTION */}
+      <section className="bg-beige py-24">
+
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+
+          <div className="h-[450px] rounded-lg overflow-hidden">
+            <img
+              src="https://res.cloudinary.com/mlbmsn0a/image/upload/v1794237727/file-to-link/myheadshot-1794237727128.jpg.jpg"
+              alt="A portrait representing the author"
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          <div>
+            <p className="text-brown uppercase tracking-[0.3em] text-xs mb-5">
+              A little about me
+            </p>
+
+            <h2 className="font-heading text-4xl md:text-5xl text-charcoal leading-tight">
+              Hello, I'm Martha.
+            </h2>
+
+            <p className="text-taupe leading-8 mt-8">
+              I'm a storyteller, a dreamer and someone who believes
+              that every experience has a story worth telling.
+            </p>
+
+            <p className="text-taupe leading-8 mt-4">
+              The Martha Journal is my personal space to document
+              my thoughts, share my experiences, reflect on life
+              and capture the moments that make the journey special.
+            </p>
+
+            <Link
+              to="/about"
+              className="inline-block mt-8 bg-charcoal text-journal px-8 py-4 rounded-full hover:bg-brown transition"
+            >
+              More About Me
+            </Link>
+          </div>
 
         </div>
 
       </section>
 
-      
-{/* ABOUT MARTHA SECTION */}
-<section className="bg-beige py-24">
+      {/* CLOSING CALL TO ACTION */}
+      <section className="bg-journal py-24 px-6 text-center">
 
-  <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        <div className="max-w-2xl mx-auto">
 
-    {/* Image */}
-    <div className="h-[450px] rounded-lg overflow-hidden">
-      <img
-        src="https://images.unsplash.com/photo-1534528741775-53994a69daeb"
-        alt="A portrait representing the author"
-        className="w-full h-full object-cover"
-      />
-    </div>
+          <p className="text-brown uppercase tracking-[0.3em] text-xs mb-5">
+            Before you go
+          </p>
 
-    {/* About Text */}
-    <div>
+          <h2 className="font-heading text-4xl md:text-5xl text-charcoal leading-tight">
+            Every story deserves a place to be told.
+          </h2>
 
-      <p className="text-brown uppercase tracking-[0.3em] text-xs mb-5">
-        A little about me
-      </p>
+          <p className="text-taupe leading-8 mt-6">
+            Take a moment, explore the journal and find a story
+            that speaks to you.
+          </p>
 
-      <h2 className="font-heading text-4xl md:text-5xl text-charcoal leading-tight">
-        Hello, I'm Martha.
-      </h2>
+          <Link
+            to="/journal"
+            className="inline-block mt-8 bg-charcoal text-journal px-8 py-4 rounded-full hover:bg-brown transition"
+          >
+            Explore All Stories
+          </Link>
 
-      <p className="text-taupe leading-8 mt-8">
-        I'm a storyteller, a dreamer and someone who believes
-        that every experience has a story worth telling.
-      </p>
+        </div>
 
-      <p className="text-taupe leading-8 mt-4">
-        The Martha Journal is my personal space to document
-        my thoughts, share my experiences, reflect on life
-        and capture the moments that make the journey special.
-      </p>
-
-      <a
-        href="/about"
-        className="inline-block mt-8 bg-charcoal text-journal px-8 py-4 rounded-full hover:bg-brown transition"
-      >
-        More About Me
-      </a>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-{/* CLOSING CALL TO ACTION */}
-<section className="bg-journal py-24 px-6 text-center">
-
-  <div className="max-w-2xl mx-auto">
-
-    <p className="text-brown uppercase tracking-[0.3em] text-xs mb-5">
-      Before you go
-    </p>
-
-    <h2 className="font-heading text-4xl md:text-5xl text-charcoal leading-tight">
-      Every story deserves a place to be told.
-    </h2>
-
-    <p className="text-taupe leading-8 mt-6">
-      Take a moment, explore the journal and find a story
-      that speaks to you.
-    </p>
-
-    <a
-      href="/journal"
-      className="inline-block mt-8 bg-charcoal text-journal px-8 py-4 rounded-full hover:bg-brown transition"
-    >
-      Explore All Stories
-    </a>
-
-  </div>
-
-</section>
-
-
+      </section>
 
     </div>
   );

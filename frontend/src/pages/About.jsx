@@ -15,7 +15,8 @@ function About() {
         </h1>
 
         <p className="text-taupe text-lg leading-8 mt-6 max-w-2xl">
-          Every journal has a voice, and this is the story behind mine.
+          A little about the person behind the stories, the ideas,
+          and the journey.
         </p>
 
       </section>
@@ -27,8 +28,8 @@ function About() {
 
           <div className="h-[450px] rounded-lg overflow-hidden">
             <img
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb"
-              alt="Portrait representing Martha"
+              src="https://res.cloudinary.com/mlbmsn0a/image/upload/v1794237727/file-to-link/myheadshot-1794237727128.jpg.jpg"
+              alt="Portrait of Martha"
               className="w-full h-full object-cover"
             />
           </div>
@@ -40,26 +41,23 @@ function About() {
             </h2>
 
             <p className="text-taupe leading-8 mt-7">
-              I'm someone who loves stories, creativity, personal
-              growth and the beautiful experiences that make life
-              what it is.
+           I'm a Software Engineering student at the University of Delta, Nigeria, with a heart for technology and a desire to build things that make a difference.
             </p>
 
             <p className="text-taupe leading-8 mt-5">
-              As I navigate life, education, technology and my
-              personal journey, I've come to appreciate the value
-              of documenting experiences and sharing lessons
-              along the way.
+             My journey in tech has been one of curiosity, challenges, learning, and growth. From building web applications to exploring backend development, I'm constantly discovering how much more there is to learn and create.
             </p>
 
             <p className="text-taupe leading-8 mt-5">
-              The Martha Journal was created as a personal space
-              to express myself freely, preserve memories and share
-              stories that might inspire someone else.
+            I'm also finding my place in the world of Web3 and blockchain, with a dream of becoming a Blockchain Engineer someday. It's a journey I'm taking one step, one lesson, and one project at a time.
+            </p>
+
+            <p className="text-taupe leading-8 mt-5">
+             Beyond tech, I love creativity, personal growth, and capturing the little moments that make life meaningful.
             </p>
 
             <p className="font-heading italic text-2xl text-brown mt-8">
-              "Every experience has a story worth telling."
+              "I'm still becoming, and every step of the journey is worth remembering."
             </p>
 
           </div>
@@ -82,10 +80,28 @@ function About() {
           </h2>
 
           <p className="text-taupe leading-8 mt-7">
-            A space for stories, thoughts, experiences and everything
-            in between. A place where I can document my journey,
-            celebrate growth, share reflections and remind myself
-            that even the smallest moments matter.
+            The Martha Journal is my personal corner of the internet.
+            A space where technology meets personal expression, where
+            I can document my experiences, share my thoughts, reflect
+            on lessons, celebrate progress, and capture the different
+            chapters of my life.
+
+            <br /><br />
+
+            It's not just about where I am today, but also about who
+            I'm becoming.
+
+            <br /><br />
+
+            I'm learning, building, exploring, and figuring things out
+            along the way. I created this space to document that journey
+            and share the stories, thoughts, and experiences that make
+            it meaningful.
+
+            <br /><br />
+
+            Welcome to The Martha Journal. A space for stories, thoughts,
+            experiences and everything in between.
           </p>
 
         </div>
