@@ -1,65 +1,59 @@
 
+import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
 function ArticleDetails() {
-  const { id } = useParams();
+  const { slug } = useParams();
 
-  const articles = [
-    {
-      id: 1,
-      title: "The Beauty of Starting Again",
-      category: "Personal Reflections",
-      date: "November 6, 2026",
-      image:
-        "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8",
-      content: [
-        "Sometimes, life takes us through seasons we never expected. There are moments when we have to pause, reflect and find the courage to begin again.",
-        "Starting again does not mean that everything you did before was a waste. It means you have learned something from the journey and are choosing to move forward with a different perspective.",
-        "I am learning that growth is not always about having everything figured out. Sometimes, it is simply about showing up, taking small steps and trusting the process.",
-        "And perhaps that is the beauty of starting again: every new beginning gives us another opportunity to become who we are meant to be."
-      ]
-    },
-    {
-      id: 2,
-      title: "Lessons I'm Learning Along the Way",
-      category: "Life & Growth",
-      date: "November 5, 2026",
-      image:
-        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e",
-      content: [
-        "Life has a way of teaching us through experiences, unexpected moments and the people we meet.",
-        "One lesson I am learning is that growth takes patience. Not every result comes immediately, and not every season will look the way we imagined.",
-        "I am learning to appreciate progress, even when it feels small."
-      ]
-    },
-    {
-      id: 3,
-      title: "Finding Joy in the Little Things",
-      category: "Lifestyle",
-      date: "November 4, 2026",
-      image:
-        "https://images.unsplash.com/photo-1441974231531-c6227db76b6e",
-      content: [
-        "Sometimes, we become so focused on the big things we want to achieve that we forget to appreciate the little moments happening around us.",
-        "A quiet morning, a good conversation, a beautiful sunset or simply having time to reflect can make an ordinary day meaningful.",
-        "Perhaps joy is not always something we have to chase. Sometimes, it is something we need to notice."
-      ]
-    }
-  ];
+  const [article, setArticle] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const article = articles.find(
-    (item) => item.id === Number(id)
-  );
+  useEffect(() => {
+    const fetchArticle = async () => {
+      try {
+        setLoading(true);
+        setError("");
 
-  if (!article) {
+        const response = await fetch(
+          `https://the-martha-journal.onrender.com/api/articles/${slug}`
+        );
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.message || "Article not found");
+        }
+
+        setArticle(result.data);
+      } catch (error) {
+        console.error("Error fetching article:", error);
+        setError("We couldn't find this story.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArticle();
+  }, [slug]);
+
+  if (loading) {
     return (
-      <div className="min-h-screen bg-journal  flex flex-col items-center justify-center px-6 text-center">
+      <div className="min-h-screen bg-journal flex items-center justify-center">
+        <p className="text-taupe">Loading story...</p>
+      </div>
+    );
+  }
+
+  if (error || !article) {
+    return (
+      <div className="min-h-screen bg-journal flex flex-col items-center justify-center px-6 text-center">
         <h1 className="font-heading text-4xl text-charcoal">
           Story not found
         </h1>
 
         <p className="text-taupe mt-4">
-          Sorry, we couldn't find the article you're looking for.
+          {error || "Sorry, we couldn't find this article."}
         </p>
 
         <Link
@@ -94,32 +88,44 @@ function ArticleDetails() {
         </h1>
 
         <p className="text-taupe text-sm mt-6">
-          Published on {article.date}
+          Published on{" "}
+          {article.published_at
+            ? new Date(article.published_at).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            : "Not yet published"}
         </p>
 
       </header>
 
       {/* FEATURED IMAGE */}
-      <div className="max-w-5xl mx-auto px-6">
-        <img
-          src={article.image}
-          alt={article.title}
-          className="w-full h-[300px] md:h-[500px] object-cover rounded-lg"
-        />
-      </div>
+      {article.image_url && (
+        <div className="max-w-5xl mx-auto px-6">
+          <img
+            src={article.image_url}
+            alt={article.title}
+            className="w-full h-[300px] md:h-[500px] object-cover rounded-lg"
+          />
+        </div>
+      )}
 
       {/* ARTICLE CONTENT */}
       <div className="max-w-5xl mx-auto px-6 py-16">
 
         <div className="space-y-7">
-          {article.content.map((paragraph, index) => (
-            <p
-              key={index}
-              className="text-taupe text-lg leading-9"
-            >
-              {paragraph}
-            </p>
-          ))}
+          {article.content
+            .split(/\n+/)
+            .filter((paragraph) => paragraph.trim() !== "")
+            .map((paragraph, index) => (
+              <p
+                key={index}
+                className="text-taupe text-lg leading-9"
+              >
+                {paragraph}
+              </p>
+            ))}
         </div>
 
         <div className="border-t border-beige mt-16 pt-8">

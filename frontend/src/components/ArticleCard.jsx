@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 function ArticleCard({ article }) {
   return (
     <article className="group">
-      <Link to={`/article/${article.id}`}>
+     <Link to={`/journal/${article.slug}`}>
         <div className="overflow-hidden rounded-lg bg-beige">
           <img
-            src={article.image}
+            src={article.image_url}
             alt={article.title}
             className="w-full h-64 object-cover group-hover:scale-105 transition duration-500"
           />
